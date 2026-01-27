@@ -212,15 +212,16 @@ export default function AdminSubscriptionsPage() {
             </div>
 
             {/* Notification Area */}
+            {/* Notification Area */}
             {subscriptions.some(s => s.receipt_status === 'pending_review') && (
-                <div className="mb-6 p-4 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center gap-3">
+                <div className={styles.notificationBanner}>
                     <AlertCircle className="text-amber-500" size={20} />
-                    <span className="text-amber-200 text-sm">
+                    <span className={styles.notificationText}>
                         You have <strong>{subscriptions.filter(s => s.receipt_status === 'pending_review').length}</strong> subscription(s) with pending receipt uploads.
                     </span>
                     <button
                         onClick={() => setFilters({ ...filters, receiptStatus: 'pending' })}
-                        className="ml-auto text-xs bg-amber-500 text-white px-3 py-1.5 rounded-md hover:bg-amber-600 transition-colors font-medium"
+                        className={styles.reviewBtn}
                     >
                         Review Now
                     </button>
@@ -368,8 +369,19 @@ export default function AdminSubscriptionsPage() {
                                         </td>
                                         <td className={styles.td} style={{ textAlign: 'right' }}>
                                             <div className="flex items-center justify-end gap-2">
+                                                {sub.quote_file_url && (
+                                                    <a
+                                                        href={sub.quote_file_url}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className={styles.viewQuoteBtn}
+                                                        title="View Quote"
+                                                    >
+                                                        <FileText size={14} />
+                                                    </a>
+                                                )}
                                                 <button
-                                                    className={`${styles.actionBtn} ${styles.editBtn}`}
+                                                    className={styles.viewDetailsBtn}
                                                     onClick={() => setModal({ type: 'view', sub })}
                                                     title="View Details"
                                                 >
@@ -534,7 +546,7 @@ export default function AdminSubscriptionsPage() {
                                                             <button
                                                                 onClick={handleMarkReviewed}
                                                                 disabled={!!actionLoading}
-                                                                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500 text-white text-xs font-bold uppercase tracking-wide shadow-lg shadow-emerald-500/20 hover:bg-emerald-600 hover:shadow-emerald-500/30 hover:-translate-y-0.5 transition-all duration-200"
+                                                                className={styles.markReviewedBtn}
                                                             >
                                                                 {actionLoading === modal.sub.id ? (
                                                                     <Loader2 size={14} className="animate-spin" />

@@ -384,6 +384,7 @@
     margin-bottom: 0.75rem;
     text-align: center;
     background: linear-gradient(135deg, #fff 0%, #d8b4fe 100%);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -661,7 +662,149 @@
     border-radius: 0 0 16px 16px;
 }
 
+
 .bottomCloseBtn:hover {
     color: white;
     background: rgba(255, 255, 255, 0.02);
+}
+
+/* Premium Notification Banner */
+.notificationBanner {
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    background: rgba(251, 146, 60, 0.1);
+    border: 1px solid rgba(251, 146, 60, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    animation: fadeIn 0.5s ease-out;
+    box-shadow: 0 4px 12px rgba(251, 146, 60, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.notificationBanner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: #fb923c;
+    border-radius: 4px 0 0 4px;
+}
+
+.notificationText {
+    color: #fdba74;
+    font-size: 0.9rem;
+    flex: 1;
+}
+
+.reviewBtn {
+    background: rgba(251, 146, 60, 0.15);
+    color: #fb923c;
+    border: 1px solid rgba(251, 146, 60, 0.3);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.reviewBtn:hover {
+    background: #fb923c;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(251, 146, 60, 0.3);
+}
+
+/* View Quote Button in Table */
+.viewQuoteBtn {
+    height: 32px;
+    width: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    background: rgba(99, 102, 241, 0.1);
+    /* Indigo tint */
+    color: #818cf8;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.viewQuoteBtn:hover {
+    background: #6366f1;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    border-color: transparent;
+}
+
+/* Mark Reviewed Button */
+.markReviewedBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background: rgba(16, 185, 129, 0.1);
+    /* Emerald tint */
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    color: #34d399;
+    /* Emerald 400 */
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+}
+
+.markReviewedBtn:hover {
+    background: #10b981;
+    /* Emerald 500 */
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
+    border-color: transparent;
+}
+
+.markReviewedBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* View Details Button */
+.viewDetailsBtn {
+    height: 32px;
+    width: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    background: rgba(59, 130, 246, 0.1);
+    /* Blue tint */
+    color: #60a5fa;
+    /* Blue 400 */
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.viewDetailsBtn:hover {
+    background: #3b82f6;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    border-color: transparent;
 }
