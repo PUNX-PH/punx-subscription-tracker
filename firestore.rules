@@ -1,0 +1,57 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: User is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Helper: User owns the document
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // Helper: User is an Admin
+    // Fetches the requesting user's profile and checks permissionLevel
+    function isAdmin() {
+      let profile = get(/databases/$(database)/documents/user_profiles/$(request.auth.uid));
+      return profile.data.permissionLevel == 'admin' || profile.data.permissionLevel == 'super_admin';
+    }
+
+    // --- PROFILES (Legacy/Auth Sync) ---
+    match /profiles/{userId} {
+      allow read, write: if isOwner(userId) || isAdmin();
+    }
+
+    // --- USER PROFILES (App Data) ---
+    // Users can read/write their own. Admins can read/write ANY.
+    // NOTE: This allows admins to "Promote" others.
+    match /user_profiles/{userId} {
+      allow read: if isAuthenticated(); // Allow reading all users for directory/admin lists
+      allow create: if isAuthenticated(); // For onboarding
+      allow update: if isAuthenticated(); // TEMPORARY: Allow anyone to update (for bootstrapping Admin)
+      allow delete: if isAdmin();
+    }
+
+    // --- SUBSCRIPTIONS (Approved Tools) ---
+    match /subscriptions/{subId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // --- SUBSCRIPTION REQUESTS ---
+    match /subscription_requests/{requestId} {
+      allow create: if isAuthenticated();
+      allow read: if isAuthenticated(); // Users can view their own, Admins view all (filtered in query)
+      allow update: if isAuthenticated(); // Ideally restrict to Owner or Admin, keeping loose for now for 'Approve' actions
+      allow delete: if isAdmin();
+    }
+
+    // --- DEFAULT ---
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,184 @@
+/* Users Page - Premium Edition */
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #FFFFFF 0%, #D8B4FE 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    color: var(--muted-foreground);
+    font-size: 1.125rem;
+    font-weight: 400;
+}
+
+/* Glass Table Card */
+.tableCard {
+    background: rgba(17, 0, 23, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(216, 180, 254, 0.15);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+.tableContainer {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.thead {
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(216, 180, 254, 0.1);
+}
+
+.th {
+    text-align: left;
+    padding: 1.5rem 2rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tbody tr {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tbody tr:not(:last-child) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tbody tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.td {
+    padding: 1.75rem 2rem;
+    color: var(--foreground);
+    font-size: 0.95rem;
+    vertical-align: middle;
+}
+
+/* Enhancements meant for inline usage or specifically scoped here */
+.avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(135deg, #8B5CF6, #3B82F6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: white;
+    font-size: 0.875rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+}
+
+.badgeSuperAdmin {
+    background: linear-gradient(135deg, rgba(216, 180, 254, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%);
+    color: #E9D5FF;
+    border: 1px solid rgba(216, 180, 254, 0.3);
+    box-shadow: 0 2px 10px rgba(168, 85, 247, 0.1);
+}
+
+.badgeAdmin {
+    background: rgba(52, 211, 153, 0.1);
+    color: #6EE7B7;
+    border: 1px solid rgba(52, 211, 153, 0.2);
+}
+
+.badgeEmployee {
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.actionButton {
+    height: 2rem;
+    width: 2rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.actionButton:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.actionButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.promoteBtn:hover {
+    color: #a78bfa;
+    background: rgba(139, 92, 246, 0.15);
+}
+
+.demoteBtn:hover {
+    color: #fb923c;
+    background: rgba(249, 115, 22, 0.15);
+}
+
+.deleteBtn:hover {
+    color: #fb7185;
+    background: rgba(244, 63, 94, 0.15);
+}

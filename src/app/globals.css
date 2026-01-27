@@ -1,0 +1,578 @@
+/* Vanilla CSS Global Styles */
+
+/*
+  Even though we are using Vanilla CSS principles,
+  we might have Tailwind directives if the project setup included it (which we avoided but Next.js might add).
+  If Tailwind is NOT installed, these @tailwind directives will be ignored/error or we should remove them.
+  Since we specifically used --no-tailwind (or tried to), we should stick to pure CSS.
+  However, Next.js app router often expects a reset.
+*/
+
+:root {
+  /* Colors - High-end Editorial Tech (Punx Style) */
+  /* Primary Backgrounds */
+  --base-background: #030005;
+  /* Near Black */
+  --gradient-mid: #110017;
+  /* Deep Purple-Black */
+  --gradient-end: #09020B;
+  /* Dark Violet Tint */
+
+  --background: var(--base-background);
+  --foreground: #F2F2F2;
+  /* Soft White */
+
+  /* Surface Colors */
+  --card: rgba(17, 0, 23, 0.4);
+  /* Glassy Deep Purple */
+  --card-foreground: #F2F2F2;
+
+  --popover: #110017;
+  --popover-foreground: #F2F2F2;
+
+  /* Neutral / UI Supporting */
+  --secondary: #09020B;
+  /* Dark Violet Tint */
+  --secondary-foreground: #8E9CA2;
+  /* Cool Gray */
+
+  --muted: #1A1A1A;
+  /* Keep dark for muted areas */
+  --muted-foreground: #8E9CA2;
+  /* Cool Gray for secondary text */
+
+  --border: #57585F;
+  /* Charcoal Gray */
+  --input: rgba(87, 88, 95, 0.2);
+
+  --accent: #D8B4FE;
+  /* Soft Purple Accent to match vibe */
+  --accent-foreground: #110017;
+
+  --destructive: #7f1d1d;
+  --destructive-foreground: #fef2f2;
+  --ring: #8E9CA2;
+
+  --radius: 4px;
+  /* Slightly more defined */
+
+  /* Primary Gradient Tokens (Refined) */
+  --primary: #8E9CA2;
+  /* Cool Gray as primary interaction color? Or keep blue? Let's use Cool Gray/White for high contrast */
+  --primary-foreground: #030005;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  color: var(--foreground);
+  background: radial-gradient(ellipse at top, rgba(139, 92, 246, 0.15) 0%, var(--base-background) 50%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  font-family: 'Inter', 'Noto Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.01em;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Animations */
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Utilities */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Custom Utilities for Gradient Text/Borders */
+.text-gradient {
+  background: var(--primary-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.border-gradient {
+  position: relative;
+  background: var(--background);
+  background-clip: padding-box;
+  border: 3px solid transparent;
+  border-radius: var(--radius);
+}
+
+.border-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  margin: -3px;
+  /* Border width */
+  border-radius: inherit;
+  background: var(--primary-gradient);
+}
+
+.glow-effect {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: var(--primary);
+  opacity: 0.1;
+  filter: blur(120px);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Premium UI Elements */
+.card {
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  font-size: 0.875rem;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--foreground);
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.input {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.5rem;
+  color: var(--foreground);
+  width: 100%;
+}
+
+.input:focus {
+  outline: 2px solid var(--primary);
+  border-color: transparent;
+}
+
+/* Button Variants */
+.btn-secondary {
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+}
+
+.btn-secondary:hover {
+  background: var(--muted);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid rgba(216, 180, 254, 0.3);
+  color: var(--foreground);
+}
+
+.btn-outline:hover {
+  background: rgba(216, 180, 254, 0.1);
+  border-color: rgba(216, 180, 254, 0.5);
+  transform: translateY(-1px);
+}
+
+.btn-gradient {
+  background: linear-gradient(135deg, #D8B4FE 0%, #A78BFA 50%, #8B5CF6 100%);
+  color: #030005;
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(216, 180, 254, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-gradient:hover::before {
+  left: 100%;
+}
+
+.btn-gradient:hover {
+  box-shadow: 0 6px 24px rgba(216, 180, 254, 0.6);
+  transform: translateY(-2px);
+}
+
+/* Button Sizes */
+.btn-sm {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  height: 2rem;
+}
+
+.btn-md {
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  height: 2.5rem;
+}
+
+.btn-lg {
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  height: 3rem;
+}
+
+.btn-icon {
+  padding: 0.5rem;
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
+/* Utilities needed for layout if not using Tailwind */
+.w-full {
+  width: 100%;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
+.mr-3 {
+  margin-right: 0.75rem;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
+.p-0 {
+  padding: 0;
+}
+
+.p-2 {
+  padding: 0.5rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.p-6 {
+  padding: 1.5rem;
+}
+
+.p-8 {
+  padding: 2rem;
+}
+
+.px-6 {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.relative {
+  position: relative;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.appearance-none {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Positioning Utilities */
+.absolute {
+  position: absolute;
+}
+
+.inset-y-0 {
+  top: 0;
+  bottom: 0;
+}
+
+.right-0 {
+  right: 0;
+}
+
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.z-10 {
+  z-index: 10;
+}
+
+/* Flexbox Utilities */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-1 {
+  gap: 0.25rem;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-3 {
+  gap: 0.75rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.gap-6 {
+  gap: 1.5rem;
+}
+
+/* Grid Utilities */
+.grid {
+  display: grid;
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+@media (min-width: 768px) {
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lg\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Spacing Utilities */
+.space-y-2>*+* {
+  margin-top: 0.5rem;
+}
+
+.space-y-4>*+* {
+  margin-top: 1rem;
+}
+
+.space-y-6>*+* {
+  margin-top: 1.5rem;
+}
+
+/* Text Utilities */
+.text-xs {
+  font-size: 0.75rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.tracking-tight {
+  letter-spacing: -0.025em;
+}
+
+.tracking-tighter {
+  letter-spacing: -0.05em;
+}
+
+.tracking-wide {
+  letter-spacing: 0.025em;
+}
+
+/* Colors */
+.text-red-500 {
+  color: #ef4444;
+}
+
+.bg-red-500\/10 {
+  background-color: rgba(239, 68, 68, 0.1);
+}

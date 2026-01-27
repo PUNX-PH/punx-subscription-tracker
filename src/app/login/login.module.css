@@ -1,0 +1,204 @@
+.container {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 15vh;
+    background-color: var(--background);
+    position: relative;
+    overflow: hidden;
+}
+
+.glow1 {
+    position: absolute;
+    top: -20%;
+    left: -10%;
+    width: 800px;
+    height: 800px;
+    background-color: var(--primary);
+    opacity: 0.1;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 1;
+    animation: pulse 4s infinite ease-in-out;
+}
+
+.glow2 {
+    position: absolute;
+    bottom: -20%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background-color: #590078;
+    /* Purple from gradient */
+    opacity: 0.1;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.contentWrapper {
+    width: 100%;
+    max-width: 448px;
+    /* max-w-md */
+    position: relative;
+    z-index: 10;
+    padding: 0 1.5rem;
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.title {
+    font-size: 5rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    color: var(--foreground);
+    margin-bottom: 1rem;
+    line-height: 1;
+}
+
+.subtitle {
+    color: var(--muted-foreground);
+    letter-spacing: 0.15em;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.loginCard {
+    background-color: rgba(10, 10, 10, 0.6);
+    /* Slightly more opaque for readability */
+    backdrop-filter: blur(40px);
+    /* Stronger blur */
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+    /* More rounded */
+    padding: 2.5rem;
+    /* More breathing room */
+    box-shadow:
+        0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        /* Deep shadow */
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    /* Inner border ring */
+    width: 100%;
+}
+
+.welcomeText {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.welcomeTitle {
+    font-size: 1.5rem;
+    /* Larger */
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--foreground);
+    margin-bottom: 0.5rem;
+}
+
+.welcomeSub {
+    font-size: 0.95rem;
+    color: var(--muted-foreground);
+    line-height: 1.5;
+}
+
+.error {
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    font-size: 0.875rem;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.divider {
+    position: relative;
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.dividerLine {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: var(--border);
+    z-index: 1;
+    opacity: 0.5;
+}
+
+.dividerText {
+    position: relative;
+    z-index: 2;
+    background-color: transparent;
+    padding: 0 0.75rem;
+    color: var(--muted-foreground);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    /* Simulate transparent bg over blur by just not having a bg and hoping user doesn't notice line behind text? 
+       Actually better to use a small gradient or robust text shadow if we can't match bg. 
+       Let's stick to a solid bg color that matches the "card" perceived color or just make the line break */
+    background-color: #0a0a0a;
+    /* Fallback matching dark bg */
+}
+
+.formGroup {
+    margin-bottom: 1rem;
+}
+
+.terms {
+    font-size: 0.75rem;
+    /* xs */
+    text-align: center;
+    color: var(--muted-foreground);
+    margin-top: 1.5rem;
+}
+
+.link {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.link:hover {
+    color: var(--foreground);
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.1;
+    }
+
+    50% {
+        opacity: 0.15;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,140 @@
+/* Requests Page - Editorial Design */
+
+.container {
+    padding-bottom: 4rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid rgba(142, 156, 162, 0.1);
+    /* Subtle separator */
+    padding-bottom: 1.5rem;
+}
+
+.titleGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 300;
+    /* Editorial thin/light */
+    letter-spacing: -0.03em;
+    color: var(--foreground);
+    margin: 0;
+    line-height: 1;
+}
+
+.subtitle {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.tableContainer {
+    background: rgba(17, 0, 23, 0.6);
+    /* Deep Purple Glass */
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(142, 156, 162, 0.15);
+    /* Cool Gray Border */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.thead {
+    background: rgba(9, 2, 11, 0.8);
+    /* Darker header */
+    border-bottom: 1px solid rgba(142, 156, 162, 0.1);
+}
+
+.th {
+    text-align: left;
+    padding: 1.25rem 1.5rem;
+    color: var(--muted-foreground);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.75rem;
+}
+
+.tr {
+    border-bottom: 1px solid rgba(142, 156, 162, 0.05);
+    /* Very subtle row lines */
+    transition: background-color 0.2s ease;
+}
+
+.tr:last-child {
+    border-bottom: none;
+}
+
+.tr:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.td {
+    padding: 1.25rem 1.5rem;
+    color: var(--foreground);
+}
+
+.toolName {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #fff;
+    letter-spacing: -0.01em;
+}
+
+.amount {
+    font-family: 'Courier New', monospace;
+    /* Tech feel for numbers */
+    color: var(--text-gradient-start, #fff);
+}
+
+.emptyState {
+    padding: 4rem;
+    text-align: center;
+    color: var(--muted-foreground);
+    font-style: italic;
+}
+
+/* Status Badges - Custom for this view */
+.status {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.status_approved {
+    background: rgba(16, 185, 129, 0.1);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.status_pending_approval {
+    background: rgba(245, 158, 11, 0.1);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.status_rejected {
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
