@@ -46,7 +46,7 @@ function LoginContent() {
             <div className={styles.contentWrapper}>
                 <div className={styles.header}>
                     <h1 className={styles.title}>
-                        PUNX<span className="text-gradient">.</span>
+                        PUNX
                     </h1>
                     <p className={styles.subtitle}>Subscription Management</p>
                 </div>

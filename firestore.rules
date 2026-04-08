@@ -35,6 +35,13 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
+    // --- CLIENTS (Tags - Any user can read/create, Admin can delete) ---
+    match /clients/{clientId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow delete: if isAdmin();
+    }
+
     // --- SUBSCRIPTIONS (Approved Tools) ---
     match /subscriptions/{subId} {
       allow read: if isAuthenticated();

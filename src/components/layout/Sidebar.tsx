@@ -2,75 +2,106 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Home, PlusCircle, CreditCard, LogOut, LayoutGrid, ShieldAlert } from 'lucide-react';
-// import { supabase } from '@/lib/supabase'; // Will use later for logout
+import { Home, PlusCircle, CreditCard, LogOut, LayoutGrid, ShieldAlert, CalendarX } from 'lucide-react';
 
-// ... imports
 import { useState, useEffect } from 'react';
 import { signOut } from 'firebase/auth';
 import { auth, db } from '@/lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import { useAuth } from '@/components/auth/AuthProvider';
 
-// Define roles that can see the item
+import styles from './layout.module.css';
+
 const menuItems = [
-    { name: 'Dashboard', href: '/dashboard', icon: LayoutGrid, roles: ['employee', 'admin', 'super_admin'] },
-    { name: 'My Requests', href: '/requests', icon: PlusCircle, roles: ['employee', 'admin', 'super_admin'] },
-    { name: 'Subscriptions', href: '/subscriptions', icon: CreditCard, roles: ['employee', 'admin', 'super_admin'] },
-    { name: 'Admin Dashboard', href: '/admin', icon: LayoutGrid, roles: ['admin', 'super_admin'] },
-    { name: 'Approvals', href: '/admin/requests', icon: PlusCircle, roles: ['admin', 'super_admin'] },
-    { name: 'Manage Subscriptions', href: '/admin/subscriptions', icon: CreditCard, roles: ['admin', 'super_admin'] },
-    { name: 'Deletion Requests', href: '/admin/deletion-requests', icon: CreditCard, roles: ['admin', 'super_admin'] },
-    { name: 'User Management', href: '/admin/users', icon: ShieldAlert, roles: ['super_admin', 'admin'] },
+    { name: 'Dashboard',             href: '/dashboard',                   icon: LayoutGrid, roles: ['employee', 'admin', 'super_admin'], badgeKey: null },
+    { name: 'My Requests',           href: '/requests',                    icon: PlusCircle, roles: ['employee', 'admin', 'super_admin'], badgeKey: null },
+    { name: 'Subscriptions',         href: '/subscriptions',               icon: CreditCard, roles: ['employee', 'admin', 'super_admin'], badgeKey: null },
+    { name: 'Admin Dashboard',       href: '/admin',                       icon: LayoutGrid, roles: ['admin', 'super_admin'],             badgeKey: null },
+    { name: 'Approvals',             href: '/admin/requests',              icon: PlusCircle, roles: ['admin', 'super_admin'],             badgeKey: 'approvals' },
+    { name: 'Manage Subscriptions',  href: '/admin/subscriptions',         icon: CreditCard, roles: ['admin', 'super_admin'],             badgeKey: null },
+    { name: 'Deletion Requests',     href: '/admin/deletion-requests',     icon: CreditCard, roles: ['admin', 'super_admin'],             badgeKey: 'deletions' },
+    { name: 'Unsubscribe Schedule',  href: '/admin/unsubscribe-schedule',  icon: CalendarX,  roles: ['admin', 'super_admin'],             badgeKey: 'unsubscribe' },
+    { name: 'User Management',       href: '/admin/users',                 icon: ShieldAlert, roles: ['super_admin', 'admin'],            badgeKey: null },
 ];
 
-import styles from './layout.module.css';
+type BadgeCounts = {
+    approvals: number;
+    deletions: number;
+    unsubscribe: number;
+};
 
 export function Sidebar() {
     const pathname = usePathname();
     const router = useRouter();
     const { user } = useAuth();
     const [userRole, setUserRole] = useState('employee');
-    const [userProfile, setUserProfile] = useState<any>(null);
-    const [permissionLevel, setPermissionLevel] = useState('employee'); // For access control
+    const [permissionLevel, setPermissionLevel] = useState('employee');
+    const [badges, setBadges] = useState<BadgeCounts>({ approvals: 0, deletions: 0, unsubscribe: 0 });
 
     useEffect(() => {
         async function fetchUserProfile() {
             if (!user) return;
-
             try {
                 const profileDoc = await getDoc(doc(db, 'user_profiles', user.uid));
                 if (profileDoc.exists()) {
                     const data = profileDoc.data();
-                    setUserProfile(data);
-                    setUserRole(data.role || 'employee'); // Custom role title for display
-                    // Set permission level - default to 'employee' for custom roles
+                    setUserRole(data.role || 'employee');
                     setPermissionLevel(data.permissionLevel || 'employee');
                 }
             } catch (error) {
                 console.error('Error fetching user profile:', error);
             }
         }
-
         fetchUserProfile();
     }, [user]);
+
+    // Clear badge when admin visits the relevant page
+    useEffect(() => {
+        if (pathname === '/admin/requests')             setBadges(b => ({ ...b, approvals: 0 }));
+        if (pathname === '/admin/deletion-requests')    setBadges(b => ({ ...b, deletions: 0 }));
+        if (pathname === '/admin/unsubscribe-schedule') setBadges(b => ({ ...b, unsubscribe: 0 }));
+    }, [pathname]);
+
+    // Fetch badge counts once permission level is known to be admin
+    useEffect(() => {
+        if (permissionLevel !== 'admin' && permissionLevel !== 'super_admin') return;
+
+        async function fetchCounts() {
+            try {
+                const todayStr = new Date().toISOString().split('T')[0];
+
+                const [approvalsSnap, deletionsSnap, unsubSnap] = await Promise.all([
+                    getDocs(query(collection(db, 'subscription_requests'), where('status', '==', 'pending_approval'))),
+                    getDocs(query(collection(db, 'deletion_requests'), where('status', '==', 'pending'))),
+                    getDocs(query(collection(db, 'subscriptions'), where('planned_unsubscribe_date', '<=', todayStr))),
+                ]);
+                setBadges({
+                    approvals:   approvalsSnap.size,
+                    deletions:   deletionsSnap.size,
+                    unsubscribe: unsubSnap.size,
+                });
+            } catch (err) {
+                console.error('Error fetching badge counts:', err);
+            }
+        }
+
+        fetchCounts();
+    }, [permissionLevel]);
 
     return (
         <div className={styles.sidebar}>
             <div className={styles.logoSection}>
-                <h1 className={styles.logoTitle}>
-                    PUNX<span className="text-gradient">.</span>
-                </h1>
+                <h1 className={styles.logoTitle}>PUNX</h1>
                 <p className={styles.logoSubtitle}>SUBSCRIPTIONS</p>
             </div>
 
             <nav className={styles.nav}>
                 {menuItems.map((item) => {
-                    // Show basic items to everyone, filter admin items by permission level
                     if (!item.roles.includes(permissionLevel)) return null;
 
                     const Icon = item.icon;
                     const isActive = pathname === item.href;
+                    const count = item.badgeKey ? badges[item.badgeKey as keyof BadgeCounts] : 0;
 
                     return (
                         <Link
@@ -79,7 +110,10 @@ export function Sidebar() {
                             className={`${styles.navItem} ${isActive ? styles.navItemActive : ''}`}
                         >
                             <Icon size={18} />
-                            {item.name}
+                            <span style={{ flex: 1 }}>{item.name}</span>
+                            {count > 0 && (
+                                <span className={styles.navBadge}>{count > 99 ? '99+' : count}</span>
+                            )}
                         </Link>
                     );
                 })}

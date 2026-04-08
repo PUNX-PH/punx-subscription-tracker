@@ -65,7 +65,7 @@ function SuperAdminLoginContent() {
             <div className={styles.contentWrapper}>
                 <div className={styles.header}>
                     <h1 className={styles.title}>
-                        PUNX<span className="text-red-500">.</span>
+                        PUNX
                     </h1>
                     <p className={styles.subtitle} style={{ color: '#fca5a5' }}>SUPER ADMIN CONSOLE</p>
                 </div>

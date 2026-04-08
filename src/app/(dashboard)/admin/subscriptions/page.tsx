@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, query, getDocs, doc, deleteDoc, updateDoc } from 'firebase/firestore';
-import { Loader2, Calendar, RefreshCw, Pencil, Trash2, Search, User, Eye, FileText, ArrowUpRight, X, Filter, CheckCircle, FileCheck, AlertCircle } from 'lucide-react';
+import { Loader2, Calendar, RefreshCw, Pencil, Trash2, Search, User, Eye, FileText, ArrowUpRight, X, Filter, CheckCircle, FileCheck, AlertCircle, PieChart, Download } from 'lucide-react';
 import styles from './subscriptions.module.css';
 
 interface Subscription {
@@ -22,6 +22,7 @@ interface Subscription {
     receipt_url?: string;
     receipt_uploaded_at?: string;
     receipt_status?: 'pending_review' | 'reviewed';
+    token_credits?: number;
 }
 
 function formatBillingCycle(type: string) {
@@ -59,8 +60,9 @@ export default function AdminSubscriptionsPage() {
     const [filters, setFilters] = useState({
         status: 'all',
         billingType: 'all',
-        receiptStatus: 'all'
+        receiptStatus: 'all',
     });
+    const [showAnalyzeModal, setShowAnalyzeModal] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -85,6 +87,7 @@ export default function AdminSubscriptionsPage() {
                 map[doc.id] = data.fullName || data.email || 'Unknown User';
             });
             setUserMap(map);
+
             setSubscriptions(subs);
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -125,7 +128,7 @@ export default function AdminSubscriptionsPage() {
         setFilters({
             status: 'all',
             billingType: 'all',
-            receiptStatus: 'all'
+            receiptStatus: 'all',
         });
     };
 
@@ -263,6 +266,7 @@ export default function AdminSubscriptionsPage() {
                             <option value="monthly">Monthly</option>
                             <option value="annual">Annual</option>
                             <option value="usage_based">Usage Based</option>
+                            <option value="token_based">Token Based</option>
                             <option value="one_time">One Time Purchase</option>
                         </select>
                     </div>
@@ -279,6 +283,17 @@ export default function AdminSubscriptionsPage() {
                             <option value="reviewed">Reviewed</option>
                             <option value="none">No Receipt</option>
                         </select>
+                    </div>
+
+                    <div className={styles.filterItem} style={{ alignSelf: 'flex-end' }}>
+                        <button
+                            className={`${styles.reviewBtn} bg-purple-500/10 text-purple-400 border-purple-500/20 hover:bg-purple-500/20`}
+                            onClick={() => setShowAnalyzeModal(true)}
+                            style={{ height: '38px', margin: 0 }}
+                        >
+                            <PieChart size={16} className="mr-2" />
+                            Analyze Report
+                        </button>
                     </div>
 
                     {activeFilterCount > 0 && (
@@ -470,7 +485,7 @@ export default function AdminSubscriptionsPage() {
                                         <div className={styles.statCard}>
                                             <span className={styles.statLabel}>Cost</span>
                                             <div className="flex items-center gap-1 mt-1">
-                                                <span className="text-2xl font-bold font-mono text-white tracking-tight">
+                                                <span className="text-2xl font-bold font-mono text-white tracking-tight whitespace-nowrap">
                                                     ₱ {modal.sub.amount.toFixed(0)}
                                                 </span>
                                             </div>
@@ -640,6 +655,17 @@ export default function AdminSubscriptionsPage() {
                                                 />
                                             </div>
                                         )}
+                                        {editForm.billing_type === 'token_based' && (
+                                            <div className={styles.formGroup}>
+                                                <label className={styles.label}>Token Credits</label>
+                                                <input
+                                                    type="number"
+                                                    className={styles.input}
+                                                    value={editForm.token_credits || 0}
+                                                    onChange={e => setEditForm({ ...editForm, token_credits: parseInt(e.target.value) })}
+                                                />
+                                            </div>
+                                        )}
                                         <div className={styles.formGroup}>
                                             <label className={styles.label}>Currency</label>
                                             <input
@@ -662,6 +688,7 @@ export default function AdminSubscriptionsPage() {
                                                 <option value="monthly">Monthly</option>
                                                 <option value="annual">Annual</option>
                                                 <option value="usage_based">Usage Based</option>
+                                                <option value="token_based">Token Based</option>
                                             </select>
                                         </div>
                                         <div className={styles.formGroup}>
@@ -700,6 +727,109 @@ export default function AdminSubscriptionsPage() {
                                 </div>
                             </>
                         )}
+                    </div>
+                </div>
+            )}
+            {/* Analyze Report Modal */}
+            {showAnalyzeModal && (
+                <div className={styles.modalOverlay} onClick={() => setShowAnalyzeModal(false)}>
+                    <div className={styles.modalContent} style={{ maxWidth: '800px' }} onClick={e => e.stopPropagation()}>
+                        {/* Header */}
+                        <div className="flex justify-between items-start mb-6">
+                            <div>
+                                <h3 className={styles.modalTitle} style={{ textAlign: 'left', marginBottom: '0.25rem' }}>
+                                    Subscription Analysis
+                                </h3>
+                                <p className={styles.subtitle} style={{ fontSize: '0.875rem' }}>
+                                    Overview of filtered active subscriptions
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Summary Cards */}
+                        <div className={styles.statsGrid}>
+                            <div className={styles.statCard}>
+                                <FileText size={100} className={`${styles.cardIcon} text-purple-500`} />
+                                <span className={styles.statLabel}>Total Subscriptions</span>
+                                <span className={styles.statValue}>
+                                    {filteredSubscriptions.length}
+                                </span>
+                            </div>
+
+                            <div className={styles.statCard}>
+                                <PieChart size={100} className={`${styles.cardIcon} text-emerald-500`} />
+                                <span className={styles.statLabel}>Total Cost</span>
+                                <span className={styles.statValue}>
+                                    ₱ {filteredSubscriptions.reduce((acc, sub) => acc + (sub.amount || 0), 0).toLocaleString()}
+                                </span>
+                            </div>
+
+                            <div className={styles.statCard}>
+                                <User size={100} className={`${styles.cardIcon} text-blue-500`} />
+                                <span className={styles.statLabel}>Active Clients</span>
+                                <span className={styles.statValue}>
+                                    {new Set(filteredSubscriptions.map(s => s.client_name || 'Internal')).size}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Detailed Breakdown */}
+                        <div className="mt-8 mb-4 flex items-center gap-2">
+                            <FileCheck size={16} className="text-purple-400" />
+                            <h4 className={styles.detailHeader} style={{ margin: 0 }}>Detailed Breakdown</h4>
+                        </div>
+
+                        <div className={styles.tableCard} style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                            <table className={styles.table}>
+                                <thead className={styles.thead} style={{ position: 'sticky', top: 0, zIndex: 10, backdropFilter: 'blur(10px)', background: 'rgba(20, 10, 30, 0.8)' }}>
+                                    <tr>
+                                        <th className={styles.th}>Tool Name</th>
+                                        <th className={styles.th}>Client</th>
+                                        <th className={styles.th} style={{ textAlign: 'center' }}>Cycle</th>
+                                        <th className={styles.th} style={{ textAlign: 'right' }}>Cost</th>
+                                    </tr>
+                                </thead>
+                                <tbody className={styles.tbody}>
+                                    {filteredSubscriptions.map((sub) => (
+                                        <tr key={sub.id}>
+                                            <td className={styles.td}>
+                                                <div className={styles.toolName}>{sub.tool_name}</div>
+                                            </td>
+                                            <td className={styles.td}>
+                                                <div className={styles.clientName}>{sub.client_name || 'Internal'}</div>
+                                            </td>
+                                            <td className={styles.td} style={{ textAlign: 'center' }}>
+                                                <span className={styles.cycleBadge} style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}>
+                                                    {sub.billing_type === 'token_based' ? 'Token' : sub.billing_type.replace('_', ' ')}
+                                                </span>
+                                            </td>
+                                            <td className={styles.td}>
+                                                <div className={styles.amount} style={{ textAlign: 'right' }}>
+                                                    ₱ {sub.amount?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    {filteredSubscriptions.length === 0 && (
+                                        <tr>
+                                            <td colSpan={4} className={styles.emptyState}>
+                                                No subscriptions match current filters.
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Footer Actions */}
+                        <div className="mt-6 flex justify-center">
+                            <button
+                                className={`${styles.modalBtn} ${styles.btnSave}`}
+                                onClick={() => setShowAnalyzeModal(false)}
+                            >
+                                Close Report
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

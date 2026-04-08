@@ -147,6 +147,18 @@
     margin-bottom: 0.5rem;
 }
 
+/* Remove Arrows/Spinners from Number Inputs */
+.noSpinners::-webkit-outer-spin-button,
+.noSpinners::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.noSpinners {
+    -moz-appearance: textfield;
+    /* Firefox */
+}
+
 /* Enhanced Input Styles */
 .inputOverride {
     background: rgba(9, 2, 11, 0.5);

@@ -12,6 +12,7 @@ import { useAuth } from '@/components/auth/AuthProvider';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
+import { TagInput } from '@/components/ui/TagInput';
 // import { Card } from '@/components/ui/Card'; // Custom card used
 import { ArrowLeft, UploadCloud, X, File } from 'lucide-react';
 import Link from 'next/link';
@@ -30,9 +31,10 @@ export default function NewRequestPage() {
         tool_name: '',
         billing_type: 'monthly',
         amount: '',
-        currency: 'PHP',
         justification: '',
-        client: ''
+        client: [] as string[],
+        token_credits: '',
+        planned_unsubscribe_date: '',
     });
 
     const [error, setError] = useState<string | null>(null);
@@ -55,6 +57,17 @@ export default function NewRequestPage() {
                 numericAmount = parseFloat(formData.amount);
                 if (isNaN(numericAmount)) {
                     setError('Please enter a valid amount.');
+                    setLoading(false);
+                    return;
+                }
+            }
+
+            // Convert token credits to number if applicable
+            let numericTokenCredits = 0;
+            if (formData.billing_type === 'token_based') {
+                numericTokenCredits = parseInt(formData.token_credits);
+                if (isNaN(numericTokenCredits)) {
+                    setError('Please enter valid token credits.');
                     setLoading(false);
                     return;
                 }
@@ -94,6 +107,7 @@ export default function NewRequestPage() {
             await addDoc(collection(db, "subscription_requests"), {
                 ...formData,
                 amount: numericAmount, // Store as number
+                token_credits: numericTokenCredits, // Store as number
                 status: 'pending_approval',
                 created_at: new Date().toISOString(),
                 requester_id: user.uid,
@@ -219,6 +233,7 @@ export default function NewRequestPage() {
                                     { value: 'monthly', label: 'Monthly' },
                                     { value: 'annual', label: 'Annual' },
                                     { value: 'usage_based', label: 'Usage Based' },
+                                    { value: 'token_based', label: 'Token Based' },
                                     { value: 'one_time', label: 'One-time Purchase' },
                                 ]}
                                 value={formData.billing_type}
@@ -227,16 +242,17 @@ export default function NewRequestPage() {
                             />
                         </div>
 
-                        {formData.billing_type !== 'usage_based' && (
+                        {formData.billing_type === 'token_based' && (
                             <div className="md:col-span-1">
                                 <Input
-                                    id="currency"
-                                    label="Currency"
-                                    type="text"
-                                    value="₱"
-                                    readOnly
-                                    className={styles.inputOverride}
-                                    style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', cursor: 'not-allowed' }}
+                                    id="token_credits"
+                                    label="Token Credits"
+                                    type="number"
+                                    placeholder="0"
+                                    value={formData.token_credits}
+                                    onChange={handleChange}
+                                    required
+                                    className={`${styles.inputOverride} ${styles.noSpinners}`}
                                 />
                             </div>
                         )}
@@ -245,27 +261,50 @@ export default function NewRequestPage() {
                             <div className="md:col-span-1">
                                 <Input
                                     id="amount"
-                                    label="Amount (Est.)"
+                                    label="Amount (₱)"
                                     type="number"
                                     step="0.01"
                                     placeholder="0.00"
                                     value={formData.amount}
                                     onChange={handleChange}
                                     required
-                                    className={styles.inputOverride}
+                                    className={`${styles.inputOverride} ${styles.noSpinners}`}
                                 />
                             </div>
                         )}
                     </div>
 
-                    <Input
-                        id="client"
-                        label="Client / Project (Optional)"
-                        placeholder="e.g. Internal, Client X"
-                        value={formData.client}
-                        onChange={handleChange}
-                        className={styles.inputOverride}
-                    />
+                    {formData.billing_type === 'monthly' && (
+                        <div className={styles.group}>
+                            <label htmlFor="planned_unsubscribe_date" className={styles.label}>
+                                Planned Unsubscribe Date
+                            </label>
+                            <input
+                                id="planned_unsubscribe_date"
+                                type="date"
+                                value={formData.planned_unsubscribe_date}
+                                min={new Date(Date.now() + 86400000).toISOString().split('T')[0]}
+                                onChange={handleChange}
+                                className={styles.inputOverride}
+                                style={{ colorScheme: 'dark', cursor: 'pointer' }}
+                            />
+                            <span style={{ fontSize: '0.72rem', color: 'rgba(142,156,162,0.5)', marginTop: '0.25rem', display: 'block' }}>
+                                Optional — set a target date to stop this monthly subscription.
+                            </span>
+                        </div>
+                    )}
+
+                    <div className={styles.group}>
+                        <label htmlFor="client" className={styles.label}>
+                            Client / Project
+                        </label>
+                        <TagInput
+                            id="client"
+                            tags={formData.client}
+                            onChange={(tags) => setFormData({ ...formData, client: tags })}
+                            placeholder="Type and press Enter to add..."
+                        />
+                    </div>
 
                     <div className={styles.group}>
                         <label htmlFor="justification" className={styles.label}>
@@ -277,8 +316,12 @@ export default function NewRequestPage() {
                             placeholder="Describe the purpose of this subscription and any relevant remarks for the admin."
                             value={formData.justification}
                             onChange={handleChange}
+                            maxLength={200}
                             required
                         />
+                        <span style={{ fontSize: '0.75rem', color: 'rgba(142, 156, 162, 0.5)', textAlign: 'right', display: 'block' }}>
+                            {formData.justification.length} / 200
+                        </span>
                     </div>
 
                     <div className={styles.group}>

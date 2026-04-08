@@ -67,12 +67,10 @@ export default function DeletionRequestsPage() {
         setActionLoading(request.id);
 
         try {
-            // Update subscription status to inactive instead of deleting
-            await updateDoc(doc(db, 'subscriptions', request.subscription_id), {
-                status: 'inactive'
-            });
+            // Delete the subscription document
+            await deleteDoc(doc(db, 'subscriptions', request.subscription_id));
 
-            // Update the deletion request status
+            // Mark the deletion request as approved
             await updateDoc(doc(db, 'deletion_requests', request.id), {
                 status: 'approved',
                 processed_at: new Date().toISOString(),
@@ -87,7 +85,6 @@ export default function DeletionRequestsPage() {
             ));
 
             setConfirmModal(null);
-            alert('Subscription marked as inactive successfully!');
         } catch (error) {
             console.error("Error approving deletion:", error);
             alert('Failed to approve deletion request.');
@@ -195,7 +192,7 @@ export default function DeletionRequestsPage() {
                                                         onClick={() => setConfirmModal({ type: 'approve', request })}
                                                         disabled={!!actionLoading}
                                                         className={`${styles.iconButton} ${styles.approveButton}`}
-                                                        title="Approve & Mark Inactive"
+                                                        title="Approve & Delete Subscription"
                                                     >
                                                         <Check size={16} />
                                                     </button>
@@ -210,7 +207,7 @@ export default function DeletionRequestsPage() {
                                                 </div>
                                             ) : (
                                                 <span className={styles.processedText}>
-                                                    {request.status === 'approved' ? 'Marked Inactive' : 'Rejected'}
+                                                    {request.status === 'approved' ? 'Deleted' : 'Rejected'}
                                                 </span>
                                             )}
                                         </td>
@@ -253,7 +250,7 @@ export default function DeletionRequestsPage() {
                                 </h3>
                                 <p className={styles.modalSubtitle}>
                                     {confirmModal.type === 'approve'
-                                        ? 'This will mark the subscription as inactive'
+                                        ? 'This will permanently delete the subscription'
                                         : 'This will deny the deletion request'}
                                 </p>
                             </div>
@@ -298,7 +295,7 @@ export default function DeletionRequestsPage() {
                                 ) : (
                                     <>
                                         {confirmModal.type === 'approve' ? <Check size={16} /> : <X size={16} />}
-                                        {confirmModal.type === 'approve' ? 'Approve & Mark Inactive' : 'Reject Request'}
+                                        {confirmModal.type === 'approve' ? 'Approve & Delete' : 'Reject Request'}
                                     </>
                                 )}
                             </button>

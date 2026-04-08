@@ -130,21 +130,43 @@
 
 .statValue {
     font-size: 2.5rem;
-    font-weight: 900;
-    background: linear-gradient(135deg, #FFFFFF 0%, #F2F2F2 100%);
+    font-weight: 800;
+    background: linear-gradient(135deg, #FFFFFF 0%, #E9D5FF 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
     letter-spacing: -0.02em;
+    filter: drop-shadow(0 2px 10px rgba(216, 180, 254, 0.2));
 }
 
 .statLabel {
     font-size: 0.875rem;
-    color: rgba(142, 156, 162, 0.9);
-    font-weight: 500;
+    color: rgba(142, 156, 162, 0.8);
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    position: relative;
+    z-index: 10;
+}
+
+.cardWatermark {
+    position: absolute;
+    top: 50%;
+    right: -2rem;
+    transform: translateY(-50%) rotate(10deg);
+    opacity: 0.08;
+    pointer-events: none;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    color: currentColor;
+    z-index: 0;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
+}
+
+.statCard:hover .cardWatermark {
+    opacity: 0.12;
+    transform: translateY(-50%) rotate(0deg) scale(1.1);
+    right: -1rem;
 }
 
 .iconWrapper {
@@ -256,75 +278,61 @@
 }
 
 .activityItem {
-    padding: 2rem 1.5rem;
+    padding: 1.25rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    position: relative;
-    margin-bottom: 0.5rem;
-}
-
-.activityItem::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: linear-gradient(180deg, transparent, rgba(216, 180, 254, 0.5), transparent);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.activityItem:hover::before {
-    opacity: 1;
-}
-
-.activityItem:last-child {
-    border-bottom: none;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    margin-bottom: 0.75rem;
+    background: rgba(255, 255, 255, 0.01);
 }
 
 .activityItem:hover {
-    background: rgba(216, 180, 254, 0.08);
-    transform: translateX(4px);
+    background: rgba(216, 180, 254, 0.05);
+    border-color: rgba(216, 180, 254, 0.2);
+    transform: translateX(4px) scale(1.01);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
-.activityContent {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex: 1;
+.activityItem:last-child {
+    margin-bottom: 0;
 }
 
+/* Icons */
 .activityIcon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
     flex-shrink: 0;
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
 .activityIconApproved {
-    background: rgba(16, 185, 129, 0.15);
-    border: 1px solid rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
     color: #34d399;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.1);
 }
 
 .activityIconRejected {
-    background: rgba(239, 68, 68, 0.15);
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
     color: #f87171;
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.1);
 }
 
 .activityIconPending {
-    background: rgba(245, 158, 11, 0.15);
-    border: 1px solid rgba(245, 158, 11, 0.3);
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.2);
     color: #fbbf24;
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.1);
 }
 
 .activityItem:hover .activityIcon {

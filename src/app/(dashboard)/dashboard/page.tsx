@@ -162,13 +162,16 @@ export default function DashboardPage() {
                 {STATS.map((stat) => {
                     const Icon = stat.icon;
                     const CardContent = (
-                        <div className="relative z-10">
-                            <div className={`${styles.iconWrapper} ${stat.colorClass}`}>
-                                <Icon size={24} />
+                        <>
+                            <Icon className={styles.cardWatermark} size={120} />
+                            <div className="relative z-10">
+                                <div className={`${styles.iconWrapper} ${stat.colorClass}`}>
+                                    <Icon size={24} />
+                                </div>
+                                <h3 className={styles.statValue}>{stat.value}</h3>
+                                <p className={styles.statLabel}>{stat.label}</p>
                             </div>
-                            <h3 className={styles.statValue}>{stat.value}</h3>
-                            <p className={styles.statLabel}>{stat.label}</p>
-                        </div>
+                        </>
                     );
 
                     return stat.href ? (

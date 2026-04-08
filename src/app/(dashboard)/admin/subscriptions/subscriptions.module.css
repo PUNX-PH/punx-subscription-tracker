@@ -165,6 +165,8 @@
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
 }
 
 .tableContainer {
@@ -230,6 +232,7 @@
     font-family: 'Geist Mono', monospace;
     color: #e2e8f0;
     font-weight: 500;
+    white-space: nowrap;
 }
 
 .renewalDate {
@@ -378,15 +381,17 @@
 }
 
 .modalTitle {
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 1.75rem;
+    font-weight: 800;
     color: white;
-    margin-bottom: 0.75rem;
-    text-align: center;
-    background: linear-gradient(135deg, #fff 0%, #d8b4fe 100%);
+    margin-bottom: 0.25rem;
+    text-align: left;
+    background: linear-gradient(135deg, #FFFFFF 0%, #E9D5FF 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
 }
 
 .modalDescription {
@@ -429,9 +434,10 @@
 }
 
 .btnSave {
-    background: #3b82f6;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
     color: white;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btnSave:hover {
@@ -550,17 +556,53 @@
 }
 
 .statCard {
-    background: #1e1b2e;
-    padding: 1.25rem;
-    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(30, 27, 46, 0.6) 0%, rgba(20, 10, 30, 0.8) 100%);
+    padding: 1.5rem;
+    border-radius: 16px;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    transition: transform 0.2s;
+    gap: 0.75rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(139, 92, 246, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.statCard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.1), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .statCard:hover {
-    transform: scale(1.02);
+    transform: translateY(-2px);
+    border-color: rgba(139, 92, 246, 0.3);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(139, 92, 246, 0.1);
+}
+
+.statCard:hover .cardIcon {
+    opacity: 0.2;
+    transform: scale(1.1) rotate(5deg);
+}
+
+.statCard:hover::before {
+    opacity: 1;
+}
+
+.cardIcon {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    opacity: 0.1;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    filter: drop-shadow(0 0 10px currentColor);
 }
 
 .statLabel {
@@ -569,6 +611,19 @@
     letter-spacing: 0.1em;
     font-weight: 700;
     color: rgba(255, 255, 255, 0.4);
+}
+
+.statValue {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #FFFFFF 0%, #E9D5FF 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-top: 0.25rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    white-space: nowrap;
 }
 
 .detailsList {

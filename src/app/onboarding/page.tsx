@@ -73,7 +73,7 @@ export default function OnboardingPage() {
             <div className={styles.cardWrapper}>
                 <div className={styles.onboardingCard}>
                     <div className={styles.header}>
-                        <h1 className={styles.title}>Welcome to PUNX.</h1>
+                        <h1 className={styles.title}>Welcome to PUNX</h1>
                         <p className={styles.subtitle}>
                             Let's set up your profile to customize your workspace.
                         </p>

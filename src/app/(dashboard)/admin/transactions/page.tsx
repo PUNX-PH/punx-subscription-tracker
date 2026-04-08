@@ -94,7 +94,7 @@ export default async function TransactionsPage() {
                                     </div>
                                 </TableCell>
                                 <TableCell className="text-[var(--muted-foreground)] font-mono text-xs">{tx.invoice_no}</TableCell>
-                                <TableCell className="font-medium">
+                                <TableCell className="font-medium whitespace-nowrap">
                                     ₱ {tx.amount.toFixed(2)}
                                 </TableCell>
                                 <TableCell>

@@ -1,0 +1,300 @@
+/* Clients Page - Premium Edition */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 4rem;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    background: linear-gradient(135deg, #FFFFFF 0%, #D8B4FE 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0 0 0.5rem 0;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: rgba(142, 156, 162, 0.9);
+    font-weight: 400;
+}
+
+.addBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #D8B4FE 0%, #C084FC 100%);
+    color: #000;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(216, 180, 254, 0.2);
+}
+
+.addBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(216, 180, 254, 0.3);
+    filter: brightness(1.1);
+}
+
+.tableCard {
+    background: rgba(17, 0, 23, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(216, 180, 254, 0.15);
+    border-radius: 16px;
+    padding: 1rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.filterBar {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid rgba(216, 180, 254, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.tableContainer {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.thead tr th {
+    text-align: left;
+    padding: 1rem 1.5rem;
+    color: rgba(142, 156, 162, 0.8);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    letter-spacing: 0.1em;
+    border-bottom: 1px solid rgba(216, 180, 254, 0.1);
+    white-space: nowrap;
+}
+
+.colCenter {
+    text-align: center !important;
+}
+
+.colRight {
+    text-align: right !important;
+}
+
+.tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.tbody tr:hover {
+    background-color: rgba(216, 180, 254, 0.03);
+}
+
+.td {
+    padding: 1.25rem 1.5rem;
+    color: var(--foreground);
+    border-bottom: 1px solid rgba(216, 180, 254, 0.05);
+    vertical-align: middle;
+}
+
+.tbody tr:last-child .td {
+    border-bottom: none;
+}
+
+.clientName {
+    font-weight: 600;
+    color: #fff;
+    font-size: 0.95rem;
+}
+
+.clientMeta {
+    font-size: 0.8rem;
+    color: rgba(142, 156, 162, 0.7);
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.actionBtn {
+    background: transparent;
+    border: none;
+    color: rgba(142, 156, 162, 0.7);
+    padding: 0.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.deleteBtn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+/* Modal Styles */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modalContent {
+    background: #110017;
+    border: 1px solid rgba(216, 180, 254, 0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modalTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 1.5rem;
+}
+
+.formGroup {
+    margin-bottom: 1.5rem;
+}
+
+.label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(142, 156, 162, 0.9);
+}
+
+.input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(216, 180, 254, 0.1);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    color: #fff;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.input:focus {
+    outline: none;
+    border-color: rgba(216, 180, 254, 0.5);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 4px rgba(216, 180, 254, 0.1);
+}
+
+.modalActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.modalBtn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.btnCancel {
+    background: transparent;
+    color: rgba(142, 156, 162, 0.8);
+    border: 1px solid rgba(142, 156, 162, 0.2);
+}
+
+.btnCancel:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+}
+
+.btnSubmit {
+    background: linear-gradient(135deg, #D8B4FE 0%, #C084FC 100%);
+    color: #000;
+}
+
+.btnSubmit:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+
+.btnDelete {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.btnDelete:hover {
+    background: rgba(239, 68, 68, 0.3);
+}
+
+.emptyState {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: rgba(142, 156, 162, 0.5);
+    font-style: italic;
+}

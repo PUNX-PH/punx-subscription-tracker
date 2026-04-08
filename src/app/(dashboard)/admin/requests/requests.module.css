@@ -6,6 +6,11 @@
     animation: fadeIn 0.5s ease-out;
 }
 
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -22,6 +27,19 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.countBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.375rem 0.875rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    background: rgba(216, 180, 254, 0.1);
+    border: 1px solid rgba(216, 180, 254, 0.25);
+    color: #D8B4FE;
+    letter-spacing: 0.02em;
 }
 
 .title {
@@ -93,7 +111,7 @@
     padding: 1.25rem 1.5rem;
     color: var(--foreground);
     font-size: 0.95rem;
-    vertical-align: middle;
+    vertical-align: top;
 }
 
 /* Tool info specific */
@@ -190,6 +208,19 @@
     box-shadow: 0 4px 15px rgba(139, 92, 246, 0.15);
     color: #c4b5fd;
     transform: translateY(-1px);
+}
+
+.viewBtn {
+    background: rgba(216, 180, 254, 0.08);
+    color: rgba(216, 180, 254, 0.7);
+    border-color: rgba(216, 180, 254, 0.15);
+}
+
+.viewBtn:hover {
+    background: rgba(216, 180, 254, 0.15);
+    color: #D8B4FE;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(216, 180, 254, 0.15);
 }
 
 .actionBtn {
@@ -345,4 +376,237 @@
     background: #dc2626;
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+}
+
+/* ── Drawer ─────────────────────────────────────────── */
+.drawerOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+    z-index: 50;
+    display: flex;
+    justify-content: flex-end;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.drawer {
+    width: 100%;
+    max-width: 440px;
+    height: 100%;
+    background: rgba(14, 4, 20, 0.98);
+    border-left: 1px solid rgba(216, 180, 254, 0.15);
+    display: flex;
+    flex-direction: column;
+    box-shadow: -20px 0 60px rgba(0, 0, 0, 0.5);
+    animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to   { transform: translateX(0);    opacity: 1; }
+}
+
+.drawerHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 2rem 1.75rem 1.5rem;
+    border-bottom: 1px solid rgba(216, 180, 254, 0.1);
+}
+
+.drawerLabel {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(216, 180, 254, 0.5);
+    margin-bottom: 0.35rem;
+}
+
+.drawerTitle {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.03em;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.drawerClient {
+    font-size: 0.8rem;
+    color: rgba(216, 180, 254, 0.55);
+    margin-top: 0.4rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.drawerClose {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+}
+
+.drawerClose:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.drawerBody {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+.drawerGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.drawerField {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(216, 180, 254, 0.08);
+    border-radius: 10px;
+    padding: 0.875rem 1rem;
+}
+
+.drawerFieldLabel {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(216, 180, 254, 0.45);
+}
+
+.drawerFieldValue {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+    margin-top: 0.1rem;
+}
+
+.drawerFieldSub {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: 0.1rem;
+}
+
+.drawerSection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.drawerSectionLabel {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(216, 180, 254, 0.45);
+}
+
+.drawerJustification {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.7;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(216, 180, 254, 0.08);
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+    white-space: pre-wrap;
+    margin: 0;
+}
+
+.drawerQuoteLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #a78bfa;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(167, 139, 250, 0.25);
+    background: rgba(139, 92, 246, 0.08);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    width: fit-content;
+}
+
+.drawerQuoteLink:hover {
+    color: #c4b5fd;
+    background: rgba(139, 92, 246, 0.15);
+    border-color: rgba(196, 181, 253, 0.4);
+    transform: translateY(-1px);
+}
+
+.drawerNone {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.2);
+    font-style: italic;
+}
+
+.drawerFooter {
+    padding: 1.25rem 1.75rem;
+    border-top: 1px solid rgba(216, 180, 254, 0.1);
+    display: flex;
+    gap: 0.75rem;
+}
+
+.drawerBtn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drawerApproveBtn {
+    background: #10b981;
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+
+.drawerApproveBtn:hover {
+    background: #059669;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.drawerRejectBtn {
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+    border-color: rgba(239, 68, 68, 0.25);
+}
+
+.drawerRejectBtn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
 }
